@@ -45,7 +45,7 @@ public class DeviceController {
 		LOGGER.info("startJob --> message published successfully");
 
 		StartNextJobListener startNextJobListener = new StartNextJobListener(
-				deviceUtil.getQualifiedTopicName(Constants.TOPIC_JOBS_START_NEXT_ACCEPTED));
+				deviceUtil.getQualifiedTopicName(Constants.TOPIC_JOBS_START_NEXT_ACCEPTED), this);
 		awsIotMqttClient.subscribe(startNextJobListener);
 
 		LOGGER.info("startJob/accepted --> subscribed successfully");

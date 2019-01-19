@@ -10,7 +10,6 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.iot.client.AWSIotException;
 import com.amazonaws.services.iot.client.AWSIotMessage;
@@ -19,16 +18,16 @@ import com.anil.iot.device.controller.DeviceController;
 import com.anil.iot.device.dto.JobExecution;
 import com.google.gson.Gson;
 
-@Service
 public class StartNextJobListener extends AWSIotTopic {
 
-	@Autowired
 	private DeviceController deviceController;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StartNextJobListener.class);
 
-	public StartNextJobListener(String topic) {
+	@Autowired
+	public StartNextJobListener(String topic, DeviceController deviceController) {
 		super(topic);
+		this.deviceController = deviceController;
 	}
 
 	@Override
