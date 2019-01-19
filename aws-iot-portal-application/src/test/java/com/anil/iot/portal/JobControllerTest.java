@@ -1,5 +1,6 @@
 package com.anil.iot.portal;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.amazonaws.services.iot.model.CreateJobRequest;
+import com.amazonaws.services.iot.model.DeleteJobRequest;
 import com.amazonaws.services.iot.model.JobExecutionsRolloutConfig;
 import com.amazonaws.services.iot.model.ListThingsResult;
 import com.anil.iot.portal.contoller.S3DocumentController;
@@ -65,6 +67,17 @@ public class JobControllerTest {
 
 		mockMvc.perform(post("/createJob").content(inputContent).contentType(MediaType.APPLICATION_JSON)).andDo(print())
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void deleteJob() throws Exception {
+		DeleteJobRequest deleteJobRequest = new DeleteJobRequest();
+		deleteJobRequest.setJobId("test-create-job");
+		deleteJobRequest.setForce(true);
+
+		String inputContent = new Gson().toJson(deleteJobRequest).toString();
+		mockMvc.perform(delete("/deleteJob").content(inputContent).contentType(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isOk());
 	}
 
 }
