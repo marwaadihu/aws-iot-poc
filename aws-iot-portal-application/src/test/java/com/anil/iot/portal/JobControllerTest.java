@@ -49,7 +49,7 @@ public class JobControllerTest {
 		createJobRequest.setJobId("test-create-job");
 
 		List<String> targets = new ArrayList<>();
-		ListThingsResult listThings = thingController.listThings();
+		ListThingsResult listThings = thingController.listThings(null, null, null);
 		targets.add(listThings.getThings().get(0).getThingArn());
 		createJobRequest.setTargets(targets);
 

@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import com.amazonaws.services.iot.client.AWSIotException;
 import com.amazonaws.services.iot.client.AWSIotMessage;
 import com.amazonaws.services.iot.client.AWSIotTopic;
 import com.anil.iot.device.controller.DeviceController;
+import com.anil.iot.device.dto.JobDocument;
 import com.anil.iot.device.dto.JobExecution;
 import com.google.gson.Gson;
 
@@ -35,14 +38,32 @@ public class StartNextJobListener extends AWSIotTopic {
 		LOGGER.info("message received: {}", message.getStringPayload());
 		JobExecution jobExecution = new Gson().fromJson(message.getStringPayload(), JobExecution.class);
 
-		String firmwareUrl = jobExecution.getExecution().getJobDocument().getFirmwareUrl();
+		String operation = jobExecution.getExecution().getJobDocument().getOperation();
 		try {
-			downloadFromUrl(firmwareUrl, "anil-poc.zip");
+			switch (operation.toLowerCase()) {
+			case "change_certificate":
+				changeCertificate(jobExecution.getExecution().getJobDocument());
 
+				break;
+			case "firmware update operation":
+				String firmwareUrl = jobExecution.getExecution().getJobDocument().getFirmwareUrl();
+				downloadFromUrl(firmwareUrl, "anil-poc.zip");
+				break;
+			default:
+				break;
+			}
 			deviceController.updateJob(jobExecution.getExecution().getJobId());
 		} catch (IOException | AWSIotException e) {
 			LOGGER.error("exception: {}", e);
 		}
+	}
+
+	private void changeCertificate(JobDocument jobDocument) throws IOException {
+		String certificatePem = jobDocument.getCertificatePem();
+		LOGGER.info("changeCertificate method called");
+
+		Files.write(Paths.get("/home/anil/anil/training/aws-iot/device_cert/server.crt"), certificatePem.getBytes());
+
 	}
 
 	private void downloadFromUrl(String downloadUrl, String outputFileName) throws IOException {

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.iot.client.AWSIotConnectionStatus;
 import com.amazonaws.services.iot.client.AWSIotException;
-import com.amazonaws.services.iot.client.AWSIotMqttClient;
+import com.anil.iot.device.configuration.Configuration;
 
 @Component
 public class DeviceUtil {
@@ -15,7 +15,7 @@ public class DeviceUtil {
 	private String thingName;
 
 	@Autowired
-	private AWSIotMqttClient awsIotMqttClient;
+	private Configuration configuration;
 
 	public String getQualifiedTopicName(String topic) {
 		return topic.replace("thingName", thingName);
@@ -26,8 +26,8 @@ public class DeviceUtil {
 	}
 
 	public void connectAwsIotMqttClient() throws AWSIotException {
-		if (AWSIotConnectionStatus.DISCONNECTED.equals(awsIotMqttClient.getConnectionStatus())) {
-			awsIotMqttClient.connect();
+		if (AWSIotConnectionStatus.DISCONNECTED.equals(configuration.getAwsIot().getConnectionStatus())) {
+			configuration.getAwsIot().connect();
 		}
 	}
 

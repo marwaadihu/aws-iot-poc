@@ -6,6 +6,10 @@ public class JobDocument {
 
 	private String firmwareUrl;
 
+	private String privateKey;
+
+	private String certificatePem;
+
 	/**
 	 * @return the operation
 	 */
@@ -32,6 +36,34 @@ public class JobDocument {
 	 */
 	public void setFirmwareUrl(String firmwareUrl) {
 		this.firmwareUrl = firmwareUrl;
+	}
+
+	/**
+	 * @return the privateKey
+	 */
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	/**
+	 * @param privateKey the privateKey to set
+	 */
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	/**
+	 * @return the certificatePem
+	 */
+	public String getCertificatePem() {
+		return certificatePem;
+	}
+
+	/**
+	 * @param certificatePem the certificatePem to set
+	 */
+	public void setCertificatePem(String certificatePem) {
+		this.certificatePem = certificatePem;
 	}
 
 }
